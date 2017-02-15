@@ -3,10 +3,10 @@ var fs = require( "fs" ),
     WebSocket = require( "ws" ),
     Q = require("q"),
     enigma = require( "enigma.js" ),
-    qixSchema = require( "./node_modules/enigma.js/schemas/qix/3.1/schema.json" ),
+    qixSchema = require( "../node_modules/enigma.js/schemas/qix/3.1/schema.json" ),
     request = require("request");
 
-var config = require('./config.json');
+var config = require('../config.json');
 
 var session = {
     "host": config.senseHostConn,
@@ -28,9 +28,9 @@ function getConfig ( user, dir ){
                 //ca: [fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\ec2-52-211-160-80.eu-west-1.compute.amazonaws.com\\root.pem"  )],
                 //key: fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\ec2-52-211-160-80.eu-west-1.compute.amazonaws.com\\client_key.pem" ),
                 //cert: fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\ec2-52-211-160-80.eu-west-1.compute.amazonaws.com\\client.pem" ),
-                ca: [fs.readFileSync( path.resolve(__dirname, "certs", "root.pem" ) )],
-                key: fs.readFileSync( path.resolve(__dirname, "certs", "client_key.pem" ) ),
-                cert: fs.readFileSync( path.resolve(__dirname, "certs", "client.pem" ) ),
+                ca: [fs.readFileSync( path.resolve(__dirname, "..", "certs", "root.pem" ) )],
+                key: fs.readFileSync( path.resolve(__dirname, "..", "certs", "client_key.pem" ) ),
+                cert: fs.readFileSync( path.resolve(__dirname, "..", "certs", "client.pem" ) ),
                 headers: {
                     "X-Qlik-User": "UserDirectory=" + dir + ";UserId=" + user
                 }
@@ -396,8 +396,8 @@ var r = request.defaults({
     host: session.host,
     //key: fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\.Local Certificates\\client_key.pem" ),
     //cert: fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\.Local Certificates\\client.pem" ),
-    key: fs.readFileSync( "certs/client_key.pem" ),
-    cert: fs.readFileSync( "certs/client.pem" ),
+    key: fs.readFileSync( path.resolve(__dirname, "..", "certs", "client_key.pem" ) ),
+    cert: fs.readFileSync( path.resolve(__dirname, "..", "certs", "client.pem" ) ),
 });
 
 /**

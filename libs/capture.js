@@ -1,4 +1,4 @@
-var config = require("./config.json");
+var config = require("../config.json");
 var Q = require("q");
 var webshot = require('webshot');
 var senseHelper = require('./sense');

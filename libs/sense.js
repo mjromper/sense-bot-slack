@@ -17,6 +17,8 @@ var session = {
     "disableCache": true
 };
 
+var certsPath = process.env.CERTS_PATH || ".";
+
 function getConfig ( user, dir ){
     var connConfig = {
         Promise: global.Promise,
@@ -28,9 +30,9 @@ function getConfig ( user, dir ){
                 //ca: [fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\ec2-52-211-160-80.eu-west-1.compute.amazonaws.com\\root.pem"  )],
                 //key: fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\ec2-52-211-160-80.eu-west-1.compute.amazonaws.com\\client_key.pem" ),
                 //cert: fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\ec2-52-211-160-80.eu-west-1.compute.amazonaws.com\\client.pem" ),
-                ca: [fs.readFileSync( path.resolve(__dirname, "..", "certs", "root.pem" ) )],
-                key: fs.readFileSync( path.resolve(__dirname, "..", "certs", "client_key.pem" ) ),
-                cert: fs.readFileSync( path.resolve(__dirname, "..", "certs", "client.pem" ) ),
+                ca: [fs.readFileSync( path.resolve(__dirname, "..", certsPath, "certs", "root.pem" ) )],
+                key: fs.readFileSync( path.resolve(__dirname, "..", certsPath, "certs", "client_key.pem" ) ),
+                cert: fs.readFileSync( path.resolve(__dirname, "..", certsPath, "certs", "client.pem" ) ),
                 headers: {
                     "X-Qlik-User": "UserDirectory=" + dir + ";UserId=" + user
                 }
@@ -396,8 +398,8 @@ var r = request.defaults({
     host: session.host,
     //key: fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\.Local Certificates\\client_key.pem" ),
     //cert: fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\.Local Certificates\\client.pem" ),
-    key: fs.readFileSync( path.resolve(__dirname, "..", "certs", "client_key.pem" ) ),
-    cert: fs.readFileSync( path.resolve(__dirname, "..", "certs", "client.pem" ) ),
+    key: fs.readFileSync( path.resolve(__dirname, "..", certsPath, "certs", "client_key.pem" ) ),
+    cert: fs.readFileSync( path.resolve(__dirname, "..", certsPath, "certs", "client.pem" ) ),
 });
 
 /**

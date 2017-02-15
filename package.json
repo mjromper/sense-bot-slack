@@ -7,7 +7,6 @@
         "node": ">= 0.6.0",
         "npm": ">= 1.0.0"
     },
-    "script": "node index.js",
     "author": "Manuel Romero",
     "license": "ISC",
     "dependencies": {
@@ -21,6 +20,6 @@
         "ws": "^0.7.2"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "node index.js"
     }
 }

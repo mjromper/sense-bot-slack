@@ -2,7 +2,10 @@
     "name": "sense-bot-slack",
     "version": "1.0.0",
     "description": "Qlik Sense Bot for Slack",
-    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "main": "index.js"
     "engines": {
         "node": ">= 0.6.0",
         "npm": ">= 1.0.0"
@@ -20,8 +23,5 @@
         "webshot": "^0.18.0",
         "winston": "^2.2.0",
         "ws": "^0.7.2"
-    },
-    "scripts": {
-        "start": "node index.js"
     }
 }

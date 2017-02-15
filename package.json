@@ -1,0 +1,27 @@
+{
+    "name": "qlik-bot",
+    "version": "1.0.0",
+    "description": "Qlik Sense Bot for Slack",
+    "main": "index.js",
+    "engines": {
+        "node": ">= 0.6.0",
+        "npm": ">= 1.0.0"
+    },
+    "script": "node index.js",
+    "author": "Manuel Romero",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.16.0",
+        "enigma.js": "^1.0.1",
+        "express": "^4.14.1",
+        "node-server-screenshot": "0.0.2",
+        "q": "^1.4.1",
+        "request": "^2.79.0",
+        "slackbots": "^1.0.2",
+        "webshot": "^0.18.0",
+        "ws": "^0.7.2"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    }
+}

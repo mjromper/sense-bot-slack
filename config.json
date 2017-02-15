@@ -1,0 +1,11 @@
+{
+	"senseHost": "rfn-public.tk",
+	"senseHostConn": "ec2-52-211-160-80.eu-west-1.compute.amazonaws.com",
+	"prefix": "/slack/",
+	"userDir": "SLACK",
+
+	"botSettings": {
+    	"token": "xoxb-141671752355-uPSar1RjXDABgAgsYvtM6zE5",
+   		"name": "Qlik Sense Bot - Dev"
+	}
+}

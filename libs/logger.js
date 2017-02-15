@@ -2,7 +2,7 @@ var winston = require('winston'),
     path = require('path'),
     rotator = require('logrotator').rotator;
 
-var logsPath = process.env.BOT_LOGS || "./";
+var logsPath = process.env.BOT_LOGS || ".";
 
 winston.loggers.add('logger', {
     transports: [
@@ -10,14 +10,14 @@ winston.loggers.add('logger', {
     		timestamp: true
     	}),
         new(winston.transports.File)({
-            filename: path.resolve(__dirname, '../', logsPath, 'logs/server.log'),
+            filename: path.resolve(__dirname, '..', logsPath, 'logs/server.log'),
             timestamp: true,
             json: false
         })
     ]
 });
 
-rotator.register(path.resolve(__dirname, '../logs/server.log'), {
+rotator.register(path.resolve(__dirname, '..', logsPath, 'logs/server.log'), {
     schedule: '12h',
     size: '200k',
     compress: false,

@@ -36,7 +36,8 @@ var options = {
 
 //var server = https.createServer( options, app );
 var server = http.createServer( app );
-var port = process.env.PORT || 3000;
-server.listen( port, function () {
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
+var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+server.listen( ip, port, function () {
     logger.log().info( 'Express listening on port ', port );
 });

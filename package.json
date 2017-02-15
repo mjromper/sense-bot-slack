@@ -5,7 +5,7 @@
     "scripts": {
         "start": "node index.js"
     },
-    "main": "index.js"
+    "main": "index.js",
     "engines": {
         "node": ">= 0.6.0",
         "npm": ">= 1.0.0"

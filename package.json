@@ -13,10 +13,12 @@
         "body-parser": "^1.16.0",
         "enigma.js": "^1.0.1",
         "express": "^4.14.1",
+        "logrotator": "^1.1.0",
         "q": "^1.4.1",
         "request": "^2.79.0",
         "slackbots": "^1.0.2",
         "webshot": "^0.18.0",
+        "winston": "^2.2.0",
         "ws": "^0.7.2"
     },
     "scripts": {

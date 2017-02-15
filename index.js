@@ -6,14 +6,12 @@ var express = require('express'),
     https = require("https"),
     http = require("http"),
     //Libs
+    logger = require('./libs/logger.js'),
     botLogic = require('./libs/bot-logic.js');
-
-var config = require('./config.json');
 
 // parse application/json
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: true } ) );
-
 app.use('/captures', express.static(path.join(__dirname, 'captures')))
 
 
@@ -38,4 +36,8 @@ var options = {
 
 //var server = https.createServer( options, app );
 var server = http.createServer( app );
-server.listen( config.port );
+var port = process.env.PORT || 8081;
+server.listen( port, function () {
+    console.log("logger", logger);
+    logger.logger().info( 'Express listening on port ' + port );
+});

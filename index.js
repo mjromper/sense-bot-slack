@@ -36,7 +36,7 @@ var options = {
 
 //var server = https.createServer( options, app );
 var server = http.createServer( app );
-var port = process.env.PORT || 8081;
+var port = process.env.PORT || 3000;
 server.listen( port, function () {
     logger.log().info( 'Express listening on port ', port );
 });

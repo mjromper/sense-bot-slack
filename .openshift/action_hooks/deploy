@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+mkdir -p $OPENSHIFT_DATA_DIR/logs
+
+echo " ---------- ENSURED FOLDERS NEEDED!!! ----------- "

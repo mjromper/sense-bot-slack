@@ -2,13 +2,15 @@ var winston = require('winston'),
     path = require('path'),
     rotator = require('logrotator').rotator;
 
+var logsPath = process.env.BOT_LOGS || "./";
+
 winston.loggers.add('logger', {
     transports: [
     	new (winston.transports.Console)({
     		timestamp: true
     	}),
         new(winston.transports.File)({
-            filename: path.resolve(__dirname, '../logs/server.log'),
+            filename: path.resolve(__dirname, '../', logsPath, 'logs/server.log'),
             timestamp: true,
             json: false
         })

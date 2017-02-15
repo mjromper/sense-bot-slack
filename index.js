@@ -38,6 +38,5 @@ var options = {
 var server = http.createServer( app );
 var port = process.env.PORT || 8081;
 server.listen( port, function () {
-    console.log("logger", logger);
-    logger.logger().info( 'Express listening on port ' + port );
+    logger.log().info( 'Express listening on port ', port );
 });

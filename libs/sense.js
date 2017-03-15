@@ -406,9 +406,10 @@ var r = request.defaults({
  * Request ticket from QPS.
  * Adjust uri as needed.
  */
-function getQlikSenseTicket( directory, user, callback ) {
+function getQlikSenseTicket( directory, user ) {
+    var deferred = Q.defer();
     r.post({
-        uri: 'https://'+session.host+':4243/qps/ticket?xrfkey=abcdefghijklmnop',
+        uri: 'https://'+session.host+':4243/qps/'+directory+'/ticket?xrfkey=abcdefghijklmnop',
         body: JSON.stringify({
             "UserDirectory": directory,
             "UserId": user,
@@ -420,12 +421,42 @@ function getQlikSenseTicket( directory, user, callback ) {
         }
     }, function(err, res, body) {
         if(err) {
-            return callback(err, null)
+            deferred.reject(err);
         };
-        var ticket = JSON.parse(body).Ticket;
-        callback(null, ticket);
+        var ticket = JSON.parse(body);
+        console.log("ticket", ticket);
+        deferred.resolve(ticket.Ticket);
+
     });
+
+    return deferred.promise;
 };
+
+function getQlikSenseSession ( directory, user, sessionId ) {
+    var deferred = Q.defer();
+    r.post({
+        uri: `https://${session.host}:4243/qps/${directory}/session?xrfkey=abcdefghijklmnop`,
+        body: JSON.stringify({
+            "UserDirectory": directory,
+            "UserId": user,
+            "Attributes": [],
+            "SessionId": sessionId
+        }),
+        headers: {
+            'x-qlik-xrfkey': 'abcdefghijklmnop',
+            'content-type': 'application/json'
+        }
+    }, function(err, res, body) {
+        if(err) {
+            deferred.reject(err);
+        };
+        var session = JSON.parse(body);
+        deferred.resolve(session.SessionId);
+
+    });
+
+    return deferred.promise;
+}
 
 function searchObjects(appId, terms, limit, callback){
      _getEnigmaService()
@@ -548,6 +579,7 @@ exports.setScriptReloadSave = setScriptReloadSave;
 exports.getObjectProperties = getObjectProperties;
 exports.setObjectProperties = setObjectProperties;
 exports.getQlikSenseTicket = getQlikSenseTicket;
+exports.getQlikSenseSession = getQlikSenseSession;
 exports.searchObjects = searchObjects;
 exports.createHypercube = createHypercube;
 

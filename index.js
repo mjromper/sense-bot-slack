@@ -14,11 +14,9 @@ app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: true } ) );
 app.use('/captures', express.static(path.join(__dirname, 'captures')))
 
-
 app.get("/ping", function(req, res, next){
     res.send({"ok": 200});
 });
-
 
 /*
 //Server application

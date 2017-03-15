@@ -5,7 +5,7 @@ var endpoint = {
     "authority": "https://slack.com",
     "authorize_endpoint": "/oauth/authorize",
     "token_endpoint": "/api/oauth.access",
-    "scope": "identity.basic identity.email identity.team",
+    "scope": "identify",
     "state": "qlikslack1234abcd",
     "redirectUriPath": "/auth/oauth2callback",
     "slackApiUri": "slack.com"
@@ -56,10 +56,6 @@ function getAuthUrl( reqUrl, settings ) {
         "&scope=" + endpoint.scope +
         "&state=" + endpoint.state;
 
-    if (settings.slack_team) {
-        url = url + "&team=" + settings.slack_team;
-    }
-
     return url;
 }
 
@@ -69,7 +65,6 @@ function getAuthUrl( reqUrl, settings ) {
  * @param {Callback} callback The callback function.
  */
 function getUserGroups( accessToken, callback ) {
-    console.log("getUserGroups with accessToken", accessToken);
     _request( {
         path: "/api/groups.list?token="+accessToken+"&pretty=1",
         method: "GET"
@@ -77,24 +72,22 @@ function getUserGroups( accessToken, callback ) {
 }
 
 function getUser( accessToken, callback ) {
-    console.log("getUser with accessToken", accessToken);
     _request( {
-        path: "/api/users.identity?token="+accessToken+"&pretty=1",
+        path: "/api/auth.test?token="+accessToken+"&pretty=1",
         method: "GET"
     }, function(e, response) {
-        if ( e ) {
+        if ( e || response.ok === false ) {
+            e = e || response;
             callback(e, null);
             return;
         }
-        _request( {
-            path: "/api/users.info?user="+response.user.id+"&token="+accessToken+"&pretty=1",
-            method: "GET"
-        }, callback );
+
+        callback(null, response);
     } );
 }
 
 /**
- * Gets userId from user data in Office 365.
+ * Gets userId from user data in Slack.
  * @param {Object} options
  * @param {Callback} callback The callback function.
  */
@@ -106,11 +99,9 @@ function _request( options, callback ) {
 
     request(options, function(error, response, body){
         if ( error ) {
-
             callback(error, null);
             return;
         }
-
         callback(null, JSON.parse(body));
 
     });

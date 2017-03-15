@@ -9,6 +9,7 @@ var certsPath = process.env.CERTS_PATH || ".";
 var settings = {
 	directory: "SLACK",
 	port: 8085,
+	slack_team: "qlikpresales",
 	client_id: "78719062706.116632750915",
 	client_secret: "6eaa2d34758f8d86b2e8cbd46c353321"
 };

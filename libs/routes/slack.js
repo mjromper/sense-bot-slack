@@ -56,6 +56,10 @@ function getAuthUrl( reqUrl, settings ) {
         "&scope=" + endpoint.scope +
         "&state=" + endpoint.state;
 
+    if ( settings.slack_team ) {
+        url += "&team="+settings.slack_team;
+    }
+
     return url;
 }
 

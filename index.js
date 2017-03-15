@@ -1,5 +1,4 @@
 var express = require('express'),
-    app = express(),
     fs = require('fs'),
     path = require("path"),
     bodyParser = require('body-parser'),
@@ -9,14 +8,21 @@ var express = require('express'),
     logger = require('./libs/logger.js'),
     botLogic = require('./libs/bot-logic.js');
 
+var app = express();
+var router = express.Router();
+
 // parse application/json
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: true } ) );
-app.use('/captures', express.static(path.join(__dirname, 'captures')))
+app.use('/captures', express.static(path.join(__dirname, 'captures')));
+
+
 
 app.get("/ping", function(req, res, next){
     res.send({"ok": 200});
 });
+
+app.use('/auth', require('./libs/routes/auth'));
 
 /*
 //Server application

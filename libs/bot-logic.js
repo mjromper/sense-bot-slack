@@ -36,7 +36,7 @@ bot.on('message', function(data) {
 
 function parse(data) {
 
-    logger.log().info( 'message', data );
+    //logger.log().info( 'message', data );
 
     var user = bot.users.filter(function(u) {
         return u.id === data.user;
@@ -93,7 +93,6 @@ function parse(data) {
     if (data.text.startsWith("hello")) {
         postMessage(group, username, "Hi " + user[0].real_name + ", what can I help you? (Hint: type 'help')", params);
         return;
-
     }
 
     if (data.text.startsWith("search")) {
@@ -104,7 +103,7 @@ function parse(data) {
         postMessage(group, username, ":hourglass_flowing_sand:", params);
         var criteria = data.text.split(" ");
         criteria.shift();
-        senseHelper.searchObjects(activeApp, criteria, 3, function(err, result) {
+        senseHelper.searchObjects( username, "SLACK", activeApp, criteria, 3, function(err, result) {
             if (err) {
                 console.log("err", err);
                 return;

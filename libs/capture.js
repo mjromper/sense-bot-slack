@@ -6,9 +6,12 @@ var senseHelper = require('./sense');
 
 function options( sessionId ) {
     return {
-        phantomConfig: { 'ignore-ssl-errors': 'true' },
+        phantomConfig: {
+            'ignore-ssl-errors': 'true'
+        },
         timeout: 30000,
-        renderDelay: 6000,
+        renderDelay: 5000,
+        //takeShotOnCallback: true,
         cookies: [ {
             name: "X-Qlik-Session-Slack",
             value: sessionId,
@@ -16,13 +19,14 @@ function options( sessionId ) {
             domain: 'rfn-public.tk'
         } ],
         screenSize: {
-            width: 600,
+            width: 500,
             height: 400
         },
         shotSize: {
-            width: 600,
+            width: 500,
             height: 400
         },
+        captureSelector: ".qv-object",
         userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)' + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
     }
 };
@@ -50,6 +54,7 @@ function capture(appId, objectId, userDir, userName, sessionId) {
 function captureMultiple(appId, objects, userDir, userName) {
     return senseHelper.getQlikSenseSession(userDir, userName, generateUUID())
     .then(function(sessionId) {
+        console.log("sessionId for picture", sessionId);
         var proms = objects.map(function(objectId) {
             return capture(appId, objectId, userDir, userName, sessionId);
         });
@@ -69,9 +74,9 @@ function generateUUID() {
 
 
 
-/*
+
 //TEST
-captureMultiple(
+/*captureMultiple(
     "d08aad70-968f-47f2-88d3-7ab0d0a30e71",
     ["dnmEmpj"],
     "slack",

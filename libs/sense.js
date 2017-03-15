@@ -8,22 +8,24 @@ var fs = require( "fs" ),
 
 var config = require('../config.json');
 
-var session = {
-    "host": config.senseHostConn,
-    "port": 4747,
-    "prefix": config.prefix,
-    "unsecure": false,
-    "route": "app/engineData",
-    "disableCache": true
+function session( appId ) {
+    return {
+        "host": config.senseHostConn,
+        "port": 4747,
+        "prefix": config.prefix,
+        "unsecure": false,
+        "route": appId? "app/"+appId : "app/engineData",
+        "disableCache": true
+    }
 };
 
 var certsPath = process.env.CERTS_PATH || ".";
 
-function getConfig ( user, dir ){
+function getConnectionConfig ( user, dir, appId ){
     var connConfig = {
         Promise: global.Promise,
         schema: qixSchema,
-        session: session,
+        session: session(appId),
         createSocket: function( url ) {
             console.log( "Connect", url );
             return new WebSocket( url, {
@@ -43,10 +45,10 @@ function getConfig ( user, dir ){
     return connConfig;
 }
 
-function _getEnigmaService( user, dir ) {
+function _getEnigmaService( user, dir, appId ) {
     var deferred = Q.defer();
 
-    var connConfig = getConfig(user, dir);
+    var connConfig = getConnectionConfig(user, dir, appId);
     enigma.getService( "qix", connConfig ).then( function(qix) {
         console.log("Connected");
         deferred.resolve(qix.global);
@@ -199,7 +201,7 @@ function save( app ) {
 };
 
 function getApp( appId ) {
-    return _getEnigmaService()
+    return _getEnigmaService( appId )
     .then( function( qix ) {
         return _openApp(qix, appId);
     });
@@ -221,7 +223,7 @@ function getApps( user, dir, callback ) {
 }
 
 function setScriptReloadSaveByAppId( appId, libName, fileName ) {
-    return _getEnigmaService()
+    return _getEnigmaService( appId )
     .then( function( qix ) {
         return qix.openApp( appId );
     } )
@@ -253,7 +255,7 @@ function setObjectProperties( app, objectId, modifyFn ) {
 
 
 function deleteApp( appId, callback ) {
-    _getEnigmaService()
+    _getEnigmaService( appId )
     .then( function( qix ) {
         return qix.deleteApp( appId )
     })
@@ -268,7 +270,7 @@ function deleteApp( appId, callback ) {
 }
 
 function getConnections( appId, callback ) {
-    _getEnigmaService()
+    _getEnigmaService( appId )
     .then( function( qix ) {
         return qix.openApp( appId );
     })
@@ -293,7 +295,7 @@ function createApp( newAppName, appIdFrom, callback ) {
 }
 
 function createEmptySheetInApp( appId, newSheetName, callback ) {
-    _getEnigmaService()
+    _getEnigmaService( appId )
     .then( function( qix ) {
         return qix.openApp( appId ).then( function( app ) {
             //Create sheet object
@@ -321,8 +323,8 @@ function createEmptySheetInApp( appId, newSheetName, callback ) {
     .done();
 }
 
-function createObjectInApp( app, objectDef, callback ) {
-    _getEnigmaService()
+function createObjectInApp( appId, objectDef, callback ) {
+    _getEnigmaService( appId )
     .then( function( qix ) {
         return qix.openApp( appId ).then( function( app ) {
             //Create object
@@ -340,7 +342,7 @@ function createObjectInApp( app, objectDef, callback ) {
 }
 
 function createObjectInAppByAppId( appId, objectDef, callback ) {
-    _getEnigmaService()
+    _getEnigmaService( appId )
     .then( function( qix ) {
         return qix.openApp( appId ).then( function( app ) {
             //Create object
@@ -369,7 +371,7 @@ function _doActualRemoveVar( app, varName ) {
 }
 
 function removeVariable( appId, varName, callback ) {
-    _getEnigmaService()
+    _getEnigmaService( appId )
     .then( function( qix ) {
         return qix.openApp( appId );
     })
@@ -395,7 +397,7 @@ function removeVariable( appId, varName, callback ) {
  */
 var r = request.defaults({
     rejectUnauthorized: false,
-    host: session.host,
+    host: session().host,
     //key: fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\.Local Certificates\\client_key.pem" ),
     //cert: fs.readFileSync( "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\.Local Certificates\\client.pem" ),
     key: fs.readFileSync( path.resolve(__dirname, "..", certsPath, "certs", "client_key.pem" ) ),
@@ -408,8 +410,9 @@ var r = request.defaults({
  */
 function getQlikSenseTicket( directory, user ) {
     var deferred = Q.defer();
+    var host =  session().host;
     r.post({
-        uri: 'https://'+session.host+':4243/qps/'+directory+'/ticket?xrfkey=abcdefghijklmnop',
+        uri: `https://${host}:4243/qps/${directory}/ticket?xrfkey=abcdefghijklmnop`,
         body: JSON.stringify({
             "UserDirectory": directory,
             "UserId": user,
@@ -434,8 +437,9 @@ function getQlikSenseTicket( directory, user ) {
 
 function getQlikSenseSession ( directory, user, sessionId ) {
     var deferred = Q.defer();
+    var host =  session().host;
     r.post({
-        uri: `https://${session.host}:4243/qps/${directory}/session?xrfkey=abcdefghijklmnop`,
+        uri: `https://${host}:4243/qps/${directory}/session?xrfkey=abcdefghijklmnop`,
         body: JSON.stringify({
             "UserDirectory": directory,
             "UserId": user,
@@ -450,16 +454,15 @@ function getQlikSenseSession ( directory, user, sessionId ) {
         if(err) {
             deferred.reject(err);
         };
-        var session = JSON.parse(body);
-        deferred.resolve(session.SessionId);
+        deferred.resolve(JSON.parse(body).SessionId);
 
     });
 
     return deferred.promise;
 }
 
-function searchObjects(appId, terms, limit, callback){
-     _getEnigmaService()
+function searchObjects( user, dir, appId, terms, limit, callback ) {
+     _getEnigmaService( user, dir, appId )
     .then( function( qix ) {
         return qix.openApp( appId );
     })
@@ -493,7 +496,7 @@ function searchObjects(appId, terms, limit, callback){
 }
 
 function createHypercube ( appId, measure, user, dir, callback ) {
-    _getEnigmaService(user, dir)
+    _getEnigmaService(user, dir, appId)
     .then( function( qix ) {
         return qix.openApp( appId );
     })

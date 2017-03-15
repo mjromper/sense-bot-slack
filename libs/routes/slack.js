@@ -1,5 +1,4 @@
 var OAuth = require('oauth'),
-    http = require('http'),
     request = require("request");
 
 var endpoint = {

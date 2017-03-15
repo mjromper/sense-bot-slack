@@ -1,9 +1,6 @@
 var express = require('express');
 var router = express.Router(),
-    fs = require('fs'),
     path = require("path"),
-    //https = require("https"),
-    http = require("http"),
     qlikAuth = require('qlik-auth'),
     slack = require('./slack.js');
 

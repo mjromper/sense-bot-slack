@@ -1,12 +1,13 @@
 {
 	"host": "http://sensebot-mjromper.rhcloud.com",
 	"senseHost": "rfn-public.tk",
+	"cookieName": "X-Qlik-Session-Slack",
 	"senseHostConn": "ec2-52-211-160-80.eu-west-1.compute.amazonaws.com",
 	"prefix": "/slack/",
 	"userDir": "SLACK",
 
 	"botSettings": {
-    	"token": "xoxb-XXXXXXXXXX-YYYYYYYYYYYYYY",
+    	"token": "xoxb-XXXXXXXXX-YYYYYYYYYYY",
    		"name": "Qlik Sense Bot - Dev"
 	}
 }

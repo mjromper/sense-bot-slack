@@ -16,7 +16,7 @@ function options( sessionId ) {
             name: "X-Qlik-Session-Slack",
             value: sessionId,
             path: '/',
-            domain: 'rfn-public.tk'
+            domain: config.senseHost,
         } ],
         screenSize: {
             width: 500,

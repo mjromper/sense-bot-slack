@@ -7,6 +7,8 @@ var router = express.Router(),
     qlikAuth = require('qlik-auth'),
     slack = require('./slack.js');
 
+var certsPath = process.env.CERTS_PATH || ".";
+
 var settings = {
 	directory: "SLACK",
 	port: 8085,
@@ -61,8 +63,8 @@ router.get('/oauth2callback', function ( req, res ) {
                             } );
                         }
                         qlikAuth.requestTicket( req, res, ticketReq, {
-                            "Certificate": path.resolve(__dirname, "../..", "certs/client.pem"),
-                            "CertificateKey": path.resolve(__dirname, "../..", "certs/client_key.pem")
+                            "Certificate": path.resolve(__dirname, "../..", certsPath, "certs". "client.pem"),
+                            "CertificateKey": path.resolve(__dirname, "../..", certsPath, "certs", "client_key.pem")
                         } );
                     });
                 });

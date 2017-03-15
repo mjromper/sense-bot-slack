@@ -63,7 +63,7 @@ router.get('/oauth2callback', function ( req, res ) {
                             } );
                         }
                         qlikAuth.requestTicket( req, res, ticketReq, {
-                            "Certificate": path.resolve(__dirname, "../..", certsPath, "certs". "client.pem"),
+                            "Certificate": path.resolve(__dirname, "../..", certsPath, "certs", "client.pem"),
                             "CertificateKey": path.resolve(__dirname, "../..", certsPath, "certs", "client_key.pem")
                         } );
                     });

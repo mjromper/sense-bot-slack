@@ -1,8 +1,12 @@
 var config = require("../config.json");
 
+var params = {};
+
 function hint() {
     return {
-        "icon_emoji": ':qlik:',
+        "icon_emoji": params.icon_emoji,
+        "as_user": params.as_user,
+        "icon_url": params.icon_url,
         "response_type": "ephemeral",
         "text": "Here are some of the commands I can understand :smile:",
         "attachments": [{
@@ -38,7 +42,9 @@ function hint() {
 
 function error(err) {
     return {
-        "icon_emoji": ':qlik:',
+        "icon_emoji": params.icon_emoji,
+        "as_user": params.as_user,
+        "icon_url": params.icon_url,
         "response_type": "ephemeral",
         "text": "There was an error while using Sense API: " + err,
         "attachments": [{
@@ -56,33 +62,48 @@ function myApps(username, apps) {
             "short": false
         };
     });
+
+    var actions = apps.map(function(a) {
+        return {
+            "name": a.qDocId,
+            "text": a.qDocName,
+            "type": "button",
+            "value": a.qDocId
+        };
+    });
+
     return {
-        "icon_emoji": ':qlik:',
+        "icon_emoji": params.icon_emoji,
+        "as_user": params.as_user,
+        "icon_url": params.icon_url,
         "response_type": "ephemeral",
-        "text": username + ",these are the apps you have access to:",
+        "text": "",
         "attachments": [{
             "fallback": "Required plain-text summary of the attachment.",
             "color": "#36a64f",
-            "pretext": "Your are logged in as " + username,
+            "pretext": username + ", these are the Apps you have access to",
             "author_name": "",
             //"author_link": "http://flickr.com/bobby/",
             //"author_icon": "http://flickr.com/icons/bobby.jpg",
             //"title": "These the apps available in this Qlik Sense Server",
             //"title_link": "https://api.slack.com/",
             //"text": "These the apps available in this Qlik Sense Server",
-            "fields": fields,
+            //"fields": fields,
             //"image_url": "http://my-website.com/path/to/image.jpg",
             //"thumb_url": "http://example.com/path/to/thumb.png",
             //"footer": "Qlik Sense API",
             //"footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
             //"ts": new Date().getTime()
+            "actions": actions
         }]
     };
 }
 
 function searchResults(infos) {
     return {
-        "icon_emoji": ':qlik:',
+        "icon_emoji": params.icon_emoji,
+        "as_user": params.as_user,
+        "icon_url": params.icon_url,
         "response_type": "in_channel",
         "text": "Objects found for your search string",
         "attachments": infos.map(function(info) {
@@ -100,7 +121,9 @@ function searchResults(infos) {
 
 function object(info) {
     return {
-        "icon_emoji": ':qlik:',
+        "icon_emoji": params.icon_emoji,
+        "as_user": params.as_user,
+        "icon_url": params.icon_url,
         "response_type": "in_channel",
         "text": "This is the object found",
         "attachments": [{
@@ -116,6 +139,10 @@ function object(info) {
         }]
     };
 }
+
+exports.setParams = function(p) {
+    params = p;
+};
 
 exports.hint = hint;
 exports.error = error;

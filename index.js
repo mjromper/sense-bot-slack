@@ -23,6 +23,7 @@ app.get("/ping", function(req, res, next){
 });
 
 app.use('/auth', require('./libs/routes/auth'));
+app.use('/interact', require('./libs/routes/interact'));
 
 /*
 //Server application

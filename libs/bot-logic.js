@@ -11,7 +11,13 @@ var bot = new Bot({
     "name": config.botSettings.name
 });
 
-var params = { icon_emoji: ':qlik:' };
+var params = {
+    "as_user": false,
+    "icon_url": "https://dl.dropboxusercontent.com/u/11081420/robo48x48.png"
+};
+messages.setParams(params);
+
+
 var appUser = {};
 
 bot.on('start', function() {

@@ -77,9 +77,9 @@ function myApps(username, apps) {
         "as_user": params.as_user,
         "icon_url": params.icon_url,
         "response_type": "ephemeral",
-        "callback_id": "select_app",
         "text": "",
         "attachments": [{
+            "callback_id": "select_app",
             "fallback": "Required plain-text summary of the attachment.",
             "color": "#36a64f",
             "pretext": username + ", these are the Apps you have access to",

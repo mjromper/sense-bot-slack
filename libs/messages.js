@@ -57,7 +57,7 @@ function error(err) {
 function myApps(username, apps) {
     var fields = apps.map(function(a) {
         return {
-            "title": a.qDocId,
+            //"title": a.qDocId,
             "value": "<https://" + config.senseHost + config.prefix + "sense/app/" + a.qDocId + "|" + a.qDocName + ">",
             "short": false
         };
@@ -82,19 +82,15 @@ function myApps(username, apps) {
             "callback_id": "select_app",
             "fallback": "Required plain-text summary of the attachment.",
             "color": "#36a64f",
-            "pretext": username + ", these are the Apps you have access to",
+            "pretext": username+", click on the link to open the Apps in you browser.",
             "author_name": "",
-            //"author_link": "http://flickr.com/bobby/",
-            //"author_icon": "http://flickr.com/icons/bobby.jpg",
-            //"title": "These the apps available in this Qlik Sense Server",
-            //"title_link": "https://api.slack.com/",
-            //"text": "These the apps available in this Qlik Sense Server",
-            //"fields": fields,
-            //"image_url": "http://my-website.com/path/to/image.jpg",
-            //"thumb_url": "http://example.com/path/to/thumb.png",
-            //"footer": "Qlik Sense API",
-            //"footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
-            //"ts": new Date().getTime()
+            "fields": fields
+        },{
+            "callback_id": "select_app",
+            "fallback": "Required plain-text summary of the attachment.",
+            "color": "#36a64f",
+            "pretext": "Or click on any button to set the App as your active app.",
+            "author_name": "",
             "actions": actions
         }]
     };
@@ -133,10 +129,7 @@ function object(info) {
             "title": "Link to this object",
             "title_link": info.path,
             //"text": "https://rfn-public.tk:8081"+info.image,
-            "image_url": config.host + info.image,
-            //"footer": "Qlik Sense API",
-            //"footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
-            //"ts": new Date().getTime()
+            "image_url": config.host + info.image
         }]
     };
 }

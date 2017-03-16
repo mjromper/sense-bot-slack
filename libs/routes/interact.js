@@ -11,7 +11,7 @@ router.post('/', function ( req, res ) {
     if (payload.callback_id === "select_app"){
     	botLogic.setActiveApp( payload.actions[0].value, payload.user.name );
     }
-
+    res.status(200).send();
 });
 
 module.exports = router;

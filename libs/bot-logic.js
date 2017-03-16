@@ -158,30 +158,33 @@ function parse(data) {
 
     if (data.text.startsWith("setapp")) {
         var appId = data.text.split(" ")[1];
-        if (appId) {
-            senseHelper.getApps(username, "SLACK", function(apps, err) {
-                if (err) {
-                    postMessage(group, username, "", messages.error(err), params);
-                } else {
-                    var app = apps.filter(function(a) {
-                        return a.qDocId === appId;
-                    });
-                    if (app[0]) {
-                        appUser[username] = app[0].qDocId;
-                        postMessage(group, username, "Your new active app is: " + app[0].qDocName, params);
-                    } else {
-                        postMessage(group, username, "I'm sorry, the app doesn't seem to exist :disappointed:", params);
-                    }
-                }
-            });
-        } else {
-            postMessage(group, username, "I'm sorry, I don't know what you are asking for :disappointed:", params);
-        }
+        setActiveApp(appId, username, group);
         return;
     }
 
 };
 
+function setActiveApp( appId, username, group ) {
+    if (appId) {
+        senseHelper.getApps(username, "SLACK", function(apps, err) {
+            if (err) {
+                postMessage(group, username, "", messages.error(err), params);
+            } else {
+                var app = apps.filter(function(a) {
+                    return a.qDocId === appId;
+                });
+                if (app[0]) {
+                    appUser[username] = app[0].qDocId;
+                    postMessage(group, username, "Your new active app is: " + app[0].qDocName, params);
+                } else {
+                    postMessage(group, username, "I'm sorry, the app doesn't seem to exist :disappointed:", params);
+                }
+            }
+        });
+    } else {
+        postMessage(group, username, "I'm sorry, I don't know what you are asking for :disappointed:", params);
+    }
+}
 
 function postMessage(group, username, message, params) {
     if (group) {
@@ -190,3 +193,6 @@ function postMessage(group, username, message, params) {
         bot.postMessageToUser(username, message, params);
     }
 }
+
+exports.postMessage = postMessage;
+exports.setActiveApp = setActiveApp;

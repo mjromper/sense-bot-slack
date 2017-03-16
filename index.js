@@ -5,8 +5,7 @@ var express = require('express'),
     https = require("https"),
     http = require("http"),
     //Libs
-    logger = require('./libs/logger.js'),
-    botLogic = require('./libs/bot-logic.js');
+    logger = require('./libs/logger.js');
 
 var app = express();
 var router = express.Router();

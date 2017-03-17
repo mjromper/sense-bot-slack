@@ -208,7 +208,6 @@ function selectMeasure( action, username, group ) {
         console.log("appId", appId);
         senseHelper.getMeasure( username, "slack", appId, action.value )
         .then( function(layout) {
-            console.log("value", );
             var val = layout.qHyperCube.qDataPages[0].qMatrix[0][0];
             console.log("layout", val);
             postMessage(group, username, action.text+": "+val.qText, params);

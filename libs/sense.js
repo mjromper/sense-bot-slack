@@ -637,7 +637,7 @@ function getMeasure( user, dir, appId, measureId ) {
                     qType: 'R',
                     qnDec: 0,
                     qUseThou: 0,
-                    qFmt: '#.##',
+                    qFmt: '###,###,###.##',
                     qDec: '.',
                     qThou: ','
                 };

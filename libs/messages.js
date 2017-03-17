@@ -169,6 +169,10 @@ function measures( measures ) {
     };
 }
 
+function measureValue( value ) {
+    return value;
+}
+
 function appNeeded( username ) {
     return username + ", I need you to set an active app. Type 'apps' to get a list of your available apps.";
 }
@@ -184,3 +188,4 @@ exports.myApps = myApps;
 exports.object = object;
 exports.searchResults = searchResults;
 exports.measures = measures;
+exports.measureValue = measureValue;

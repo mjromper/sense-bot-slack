@@ -495,7 +495,7 @@ function searchObjects( user, dir, appId, terms, limit, callback ) {
 
 }
 
-function createHypercube ( appId, measure, user, dir, callback ) {
+function createHypercube ( user, dir, appId, measure, callback ) {
     _getEnigmaService(user, dir, appId)
     .then( function( qix ) {
         return qix.openApp( appId );
@@ -503,7 +503,7 @@ function createHypercube ( appId, measure, user, dir, callback ) {
     .then( function ( app ) {
         var obj = {
             "qInfo": {
-                "qType": "kpi"
+                "qType": "measureValue"
             },
             "qHyperCubeDef": {
                 "qStateName": "$",
@@ -628,11 +628,42 @@ function getMeasure( user, dir, appId, measureId ) {
         return qix.openApp( appId );
     })
     .then( function ( app ) {
-        return app.getMeasure( measureId );
+        return app.getMeasure( measureId )
+            .then( function ( measure ) {
+                return measure.getLayout();
+            })
+            .then( function (layout) {
+                layout.qMeasure.qNumFormat = {
+                    qType: 'R',
+                    qnDec: 0,
+                    qUseThou: 0,
+                    qFmt: '#.##',
+                    qDec: '.',
+                    qThou: ','
+                };
+                layout.qMeasure.qIsAutoFormat = false;
+                return app.createSessionObject({
+                        "qInfo": {
+                            "qType": "measureVal"
+                        },
+                        "qHyperCubeDef": {
+                            "qStateName": "$",
+                            "qMeasures": [{
+                                "qDef": layout.qMeasure
+                            }],
+                            "qInitialDataFetch": [{
+                                "qTop": 0,
+                                "qHeight": 1,
+                                "qLeft": 0,
+                                "qWidth": 1
+                            }]
+                        }
+                    }).then( function(object) {
+                        return object.getLayout();
+                    });
+            })
     })
-    .then( function ( measure ) {
-        return measure.getLayout();
-    });
+
 }
 
 //***Libray exports

@@ -9,10 +9,10 @@ router.get('/ping', function ( req, res ) {
 router.post('/', function ( req, res ) {
     var payload = JSON.parse(req.body.payload);
     if (payload.callback_id === "select_app"){
-    	botLogic.setActiveApp( payload.actions[0].value, payload.user.name );
+    	botLogic.setActiveApp( payload.actions[0], payload.user.name );
     }
     if (payload.callback_id === "select_measure"){
-    	botLogic.selectMeasure( payload.actions[0].value, payload.user.name );
+    	botLogic.selectMeasure( payload.actions[0], payload.user.name );
     }
     res.status(200).send();
 });

@@ -180,14 +180,14 @@ function parse(data) {
 
 };
 
-function setActiveApp( appId, username, group ) {
-    if (appId) {
+function setActiveApp( action, username, group ) {
+    if (action) {
         senseHelper.getApps(username, "SLACK", function(apps, err) {
             if (err) {
                 postMessage(group, username, "", messages.error(err), params);
             } else {
                 var app = apps.filter(function(a) {
-                    return a.qDocId === appId;
+                    return a.qDocId === action.value;
                 });
                 if (app[0]) {
                     appUser[username] = app[0].qDocId;
@@ -202,16 +202,20 @@ function setActiveApp( appId, username, group ) {
     }
 }
 
-function selectMeasure( measureId, username, group ) {
-    var appId = appUser[username];
-    postMessage(group, username, messages.measureValue( measureId ), params);
-    var appId = appUser[username];
-    console.log("appId", appId);
-    senseHelper.getMeasure( username, "slack", appId, measureId )
-    .then( function(layout) {
-        console.log("layout", layout);
-        postMessage(group, username, "", layout, params);
-    });
+function selectMeasure( action, username, group ) {
+    if (action) {
+        var appId = appUser[username];
+        console.log("appId", appId);
+        senseHelper.getMeasure( username, "slack", appId, action.value )
+        .then( function(layout) {
+            console.log("value", );
+            var val = layout.qHyperCube.qDataPages[0].qMatrix[0][0];
+            console.log("layout", val);
+            postMessage(group, username, action.text+": "+val.qText, params);
+        });
+    } else {
+        postMessage(group, username, "I'm sorry, I don't know what you are asking for :disappointed:", params);
+    }
 }
 
 function postMessage(group, username, message, params) {

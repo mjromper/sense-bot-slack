@@ -204,11 +204,14 @@ function setActiveApp( appId, username, group ) {
 
 function selectMeasure( measureId, username, group ) {
     var appId = appUser[username];
+    postMessage(group, username, messages.measureValue( measureId ), params);
+    var appId = appUser[username];
+    console.log("appId", appId);
     senseHelper.getMeasure( username, "slack", appId, measureId )
     .then( function(layout) {
+        console.log("layout", layout);
         postMessage(group, username, "", layout, params);
     });
-
 }
 
 function postMessage(group, username, message, params) {

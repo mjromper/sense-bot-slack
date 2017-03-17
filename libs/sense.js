@@ -652,5 +652,5 @@ exports.searchObjects = searchObjects;
 exports.createHypercube = createHypercube;
 exports.getDimensions = getDimensions;
 exports.getMeasures = getMeasures;
-exports.getMeasures = getMeasures;
+exports.getMeasure = getMeasure;
 

@@ -11,7 +11,7 @@ router.post('/', function ( req, res ) {
     var payload = JSON.parse(req.body.payload);
     logger.log().info( "interact payload", payload );
     if (payload.callback_id === "select_app"){
-    	botLogic.setActiveApp( payload.actions[0], payload.user.name );
+    	botLogic.setActiveApp( payload.actions[0].value, payload.user.name );
     }
     if (payload.callback_id === "select_measure"){
     	botLogic.selectMeasure( payload.actions[0], payload.user.name );

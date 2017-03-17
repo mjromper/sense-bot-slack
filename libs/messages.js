@@ -59,7 +59,7 @@ function myApps(username, apps) {
         return {
             //"title": a.qDocId,
             "value": "<https://" + config.senseHost + config.prefix + "sense/app/" + a.qDocId + "|" + a.qDocName + ">",
-            "short": false
+            "short": true
         };
     });
 

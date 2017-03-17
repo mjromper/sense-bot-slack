@@ -178,16 +178,38 @@ function parse(data) {
         return;
     }
 
+
+    if (data.text.startsWith("show me the")) {
+        if (!activeApp) {
+            postMessage(group, username, messages.appNeeded( user[0].real_name ), params);
+            return;
+        }
+        var measureName = data.text.split(" ")[3];
+        senseHelper.getMeasures( username, "slack", activeApp )
+            .then( function (layout) {
+                var measures = layout.qMeasureList.qItems;
+                measures = measures.filter( function(m){
+                    return m.qMeta.title.toLowerCase().indexOf(measureName) !== -1;
+                });
+                postMessage(group, username, "", messages.measures(measures), params);
+            }, function(err) {
+                postMessage(group, username, "", messages.error(err));
+            } );
+
+        return;
+
+    }
+
 };
 
-function setActiveApp( action, username, group ) {
-    if (action) {
+function setActiveApp( appId, username, group ) {
+    if (appId) {
         senseHelper.getApps(username, "SLACK", function(apps, err) {
             if (err) {
                 postMessage(group, username, "", messages.error(err), params);
             } else {
                 var app = apps.filter(function(a) {
-                    return a.qDocId === action.value;
+                    return a.qDocId === appId;
                 });
                 if (app[0]) {
                     appUser[username] = app[0].qDocId;

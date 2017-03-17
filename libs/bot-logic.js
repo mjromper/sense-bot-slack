@@ -209,8 +209,8 @@ function selectMeasure( action, username, group ) {
         senseHelper.getMeasure( username, "slack", appId, action.value )
         .then( function(layout) {
             var val = layout.qHyperCube.qDataPages[0].qMatrix[0][0];
-            console.log("layout", val);
-            postMessage(group, username, action.text+": "+val.qText, params);
+            var name = layout.qHyperCube.qMeasureInfo[0].qFallbackTitle;
+            postMessage(group, username, name+": "+val.qText, params);
         });
     } else {
         postMessage(group, username, "I'm sorry, I don't know what you are asking for :disappointed:", params);

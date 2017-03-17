@@ -622,6 +622,19 @@ function getMeasures( user, dir, appId ) {
     } );
 }
 
+function getMeasure( user, dir, appId, measureId ) {
+    return _getEnigmaService(user, dir, appId)
+    .then( function( qix ) {
+        return qix.openApp( appId );
+    })
+    .then( function ( app ) {
+        return app.getMeasure( measureId );
+    })
+    .then( function ( measure ) {
+        return measure.getLayout();
+    });
+}
+
 //***Libray exports
 exports.getApps = getApps;
 exports.getApp = getApp;
@@ -638,5 +651,6 @@ exports.getQlikSenseSession = getQlikSenseSession;
 exports.searchObjects = searchObjects;
 exports.createHypercube = createHypercube;
 exports.getDimensions = getDimensions;
+exports.getMeasures = getMeasures;
 exports.getMeasures = getMeasures;
 

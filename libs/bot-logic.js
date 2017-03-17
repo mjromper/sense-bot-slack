@@ -179,12 +179,18 @@ function parse(data) {
     }
 
 
-    if (data.text.startsWith("show me the")) {
+    if (data.text.startsWith("show me the") || data.text.startsWith("show the")) {
         if (!activeApp) {
             postMessage(group, username, messages.appNeeded( user[0].real_name ), params);
             return;
         }
-        var measureName = data.text.split(" ")[3];
+        var splitter = data.text.split("show me the");
+        if ( splitter.length === 1 ) {
+            splitter = data.text.split("show the");
+        }
+
+        var measureName = splitter[1].split(" ")[1];
+
         senseHelper.getMeasures( username, "slack", activeApp )
             .then( function (layout) {
                 var measures = layout.qMeasureList.qItems;

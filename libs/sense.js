@@ -570,6 +570,58 @@ function createHypercube ( appId, measure, user, dir, callback ) {
     .done();
 }
 
+function getDimensions( user, dir, appId ) {
+    return _getEnigmaService(user, dir, appId)
+    .then( function( qix ) {
+        return qix.openApp( appId );
+    })
+    .then( function ( app ) {
+        var obj = {
+            "qDimensionListDef": {
+                "qType": "dimension",
+                "qData": {
+                    "title": "/qMetaDef/title",
+                    "tags": "/qMetaDef/tags",
+                    "grouping": "/qDim/qGrouping",
+                    "info": "/qDimInfos"
+                }
+            },
+            "qInfo": {
+                "qId": "DimensionList",
+                "qType": "DimensionList"
+            }
+        };
+        return app.createSessionObject(obj);
+    }).then( function ( sessionObj ) {
+        return sessionObj.getLayout();
+    } );
+}
+
+function getMeasures( user, dir, appId ) {
+    return _getEnigmaService(user, dir, appId)
+    .then( function( qix ) {
+        return qix.openApp( appId );
+    })
+    .then( function ( app ) {
+        var obj = {
+            "qMeasureListDef": {
+                "qType": "measure",
+                "qData": {
+                    "title": "/qMetaDef/title",
+                    "tags": "/qMetaDef/tags"
+                }
+            },
+            "qInfo": {
+                "qId": "MeasureList",
+                "qType": "MeasureList"
+            }
+        };
+        return app.createSessionObject(obj);
+    }).then( function ( sessionObj ) {
+        return sessionObj.getLayout();
+    } );
+}
+
 //***Libray exports
 exports.getApps = getApps;
 exports.getApp = getApp;
@@ -585,4 +637,6 @@ exports.getQlikSenseTicket = getQlikSenseTicket;
 exports.getQlikSenseSession = getQlikSenseSession;
 exports.searchObjects = searchObjects;
 exports.createHypercube = createHypercube;
+exports.getDimensions = getDimensions;
+exports.getMeasures = getMeasures;
 

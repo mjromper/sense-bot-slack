@@ -77,19 +77,19 @@ function myApps(username, apps) {
         "as_user": params.as_user,
         "icon_url": params.icon_url,
         "response_type": "ephemeral",
-        "text": "",
+        "text": username+", you can interact with all these apps:",
         "attachments": [{
+            "title": "Open in a browser",
             "callback_id": "select_app",
             "fallback": "Required plain-text summary of the attachment.",
             "color": "#36a64f",
-            "pretext": username+", click on the link to open the Apps in you browser.",
             "author_name": "",
             "fields": fields
         },{
+            "title": "Set your active app",
             "callback_id": "select_app",
             "fallback": "Required plain-text summary of the attachment.",
             "color": "#36a64f",
-            "pretext": "Or click on any button to set the App as your active app.",
             "author_name": "",
             "actions": actions
         }]
@@ -134,12 +134,53 @@ function object(info) {
     };
 }
 
+function measures( measures ) {
+    var actions = measures.map(function(m) {
+        return {
+            "name": m.qInfo.qId,
+            "text": m.qMeta.title,
+            "type": "button",
+            "value": m.qInfo.qId
+        };
+    });
+
+    var a = Math.ceil(measures.length/5);
+    var attachments = [];
+    for (var i=0; i<a; i++) {
+        attachments.push({
+            //"title": "Get the measure value by clicking on the button",
+            "callback_id": "select_measure",
+            "fallback": "Required plain-text summary of the attachment.",
+            "color": "#36a64f",
+            "author_name": "",
+            "actions": actions.filter(function(a, index) {
+                return index >= 5*i && index <= (5*i+4);
+            })
+        });
+    }
+
+    return {
+        "icon_emoji": params.icon_emoji,
+        "as_user": params.as_user,
+        "icon_url": params.icon_url,
+        "response_type": "ephemeral",
+        "text": "There are "+measures.length+" measures in this app. Click on them to get the value.",
+        "attachments": attachments
+    };
+}
+
+function appNeeded( username ) {
+    return username + ", I need you to set an active app. Type 'apps' to get a list of your available apps.";
+}
+
 exports.setParams = function(p) {
     params = p;
 };
 
 exports.hint = hint;
+exports.appNeeded = appNeeded;
 exports.error = error;
 exports.myApps = myApps;
-exports.object = object
+exports.object = object;
 exports.searchResults = searchResults;
+exports.measures = measures;

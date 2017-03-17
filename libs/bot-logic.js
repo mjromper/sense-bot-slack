@@ -52,7 +52,7 @@ function parse(data) {
         return u.id === data.channel;
     });
     group = group[0] ? group[0] : null;
-
+    console.log("user", user);
     if (!user || user.length === 0) {
         logger.log().info( "no user found!", data );
         return;
@@ -162,6 +162,22 @@ function parse(data) {
         return;
     }
 
+    if (data.text.startsWith("measures")) {
+        if (!activeApp) {
+            postMessage(group, username, messages.appNeeded( user[0].real_name ), params);
+            return;
+        }
+        senseHelper.getMeasures( username, "slack", activeApp )
+            .then( function (layout) {
+                var measures = layout.qMeasureList.qItems;
+                postMessage(group, username, "", messages.measures(measures), params);
+            }, function(err) {
+                postMessage(group, username, "", messages.error(err));
+            } );
+
+        return;
+    }
+
 };
 
 function setActiveApp( appId, username, group ) {
@@ -186,6 +202,10 @@ function setActiveApp( appId, username, group ) {
     }
 }
 
+function selectMeasure( measureId, username, group ) {
+    postMessage(group, username, measureId, params);
+}
+
 function postMessage(group, username, message, params) {
     if (group) {
         bot.postMessageToGroup(group.name, message, params);
@@ -196,3 +216,4 @@ function postMessage(group, username, message, params) {
 
 exports.postMessage = postMessage;
 exports.setActiveApp = setActiveApp;
+exports.selectMeasure = selectMeasure;
